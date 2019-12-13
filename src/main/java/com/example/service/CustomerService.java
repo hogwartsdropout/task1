@@ -1,19 +1,38 @@
 package com.example.service;
 
+import com.example.entity.Car;
 import com.example.entity.Customer;
+import com.example.entity.Order;
+import com.example.repository.CarRepository;
 import com.example.repository.CustomerRepository;
+import com.example.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerService {
 
-    private CustomerRepository repository;
+    private CustomerRepository customerRepository;
+    private OrderRepository orderRepository;
+    private CarRepository carRepository;
     @Autowired
-    private CustomerService(CustomerRepository repository){
-        this.repository = repository;
+    private CustomerService(CustomerRepository customerRepository, CarRepository carRepository, OrderRepository orderRepository){
+        this.customerRepository = customerRepository;
+        this.carRepository = carRepository;
+        this.orderRepository = orderRepository;
     }
-    public Customer getCustomer(long id){
-        return repository.findOne(id);
+    public Customer getCustomerById(long id){
+        return customerRepository.findOne(id);
     }
+    public Car getCarById(long id){return carRepository.findOne(id);}
+    public void addCustomer(Customer customer){
+        customerRepository.save(customer);
+    }
+    public void addCar(Car car){
+       Car savedCar = (Car) carRepository.save(car);
+    }
+    public void addOrder(Order order){
+        orderRepository.save(order);
+    }
+
 }

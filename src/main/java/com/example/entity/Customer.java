@@ -1,22 +1,22 @@
 package com.example.entity;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
-@RequiredArgsConstructor
-@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
+//@RequiredArgsConstructor
+//@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
+//@ToString
 @Entity
 @Table(name = "client")
 public class Customer {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name="id", updatable = false, nullable = false)
-    private long id;
+    private Long id;
     @Column(name="username",unique = true)
     private String username;
     private String f_name;
@@ -33,5 +33,24 @@ public class Customer {
 
     public void setLName(String LName) {
         this.l_name = LName;
+    }
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", f_name='" + f_name + '\'' +
+                ", l_name='" + l_name + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
+    public Customer(String username, String f_name, String l_name, String password) {
+        this.username = username;
+        this.f_name = f_name;
+        this.l_name = l_name;
+        this.password = password;
+    }
+    public Customer(){
     }
 }

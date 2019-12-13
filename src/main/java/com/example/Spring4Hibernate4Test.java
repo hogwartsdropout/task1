@@ -1,12 +1,13 @@
 package com.example;
 
-import com.example.repository.CustomerRepository;
+import com.example.entity.Car;
+import com.example.entity.Customer;
+import com.example.entity.Order;
 import com.example.service.CustomerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.example.config.AppConfig;
-import com.example.dao.IPersonDao;
+import com.example.dao.ITestDao;
 
 public class Spring4Hibernate4Test {
 
@@ -14,10 +15,12 @@ public class Spring4Hibernate4Test {
 	  AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
   	  ctx.register(AppConfig.class);
 	  ctx.refresh();
-	  IPersonDao pdao = ctx.getBean(IPersonDao.class);
+	  ITestDao pdao = ctx.getBean(ITestDao.class);
 	  CustomerService customerService = ctx.getBean((CustomerService.class));
-//	  pdao.saveClient();
-	  System.out.println(customerService.getCustomer(40L));
+	  pdao.saveOrder(new Order(40L,320L,"white","CREATED"));
+	  customerService.addCar(new Car("abc", "def"));
+	  customerService.addCustomer(new Customer("asdf","Qwer","Ty", null));
+	  System.out.println(customerService.getCustomerById(40L));
 	  System.out.println("Done");
   }
 }
