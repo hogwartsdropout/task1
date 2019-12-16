@@ -66,6 +66,7 @@ public class Order {
         this.color = color;
         this.status = status;
     }
+    public Order(){}
 
     @Override
     public String toString() {

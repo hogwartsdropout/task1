@@ -14,19 +14,16 @@ import com.example.entity.Person;
 public class TestDao implements ITestDao {
 	@Autowired
 	private HibernateTemplate  hibernateTemplate;
-	public void savePerson() {
-		Person person = new Person();
-//		person.setId(1);
-		person.setName("Ram");
-		hibernateTemplate.save(person);
 
-	}
 	public void saveClient(){
 		Customer client = new Customer();
 		client.setUsername("lll");
 		client.setFName("Ivan");
 		client.setLName("Ivanov");
 		hibernateTemplate.save(client);
+	}
+	public void saveCustomer(Customer customer){
+		hibernateTemplate.save(customer);
 	}
 	public void saveCar(Car carToSave){
 		hibernateTemplate.save(carToSave);

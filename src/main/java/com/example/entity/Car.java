@@ -41,4 +41,6 @@ public class Car {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Car(){}
 }
