@@ -1,10 +1,9 @@
-apply plugin: 'java'
-apply plugin: 'idea'
-//apply plugin: 'io.freefair.lombok' version '3.8.4'
-//plugins{
-//    id 'java'
-//    id 'idea'
-//}
+plugins {
+    id 'org.springframework.boot' version '2.1.7.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+}
+
 archivesBaseName = 'MovilizerTask'
 version = '1.0'
 repositories {
@@ -19,8 +18,8 @@ jar {
     }
 }
 dependencies {
-   implementation 'org.springframework.boot:spring-boot-starter-data-jpa:1.1.4.RELEASE'
-   compile 'org.hibernate:hibernate-core:4.3.6.Final'
+   implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.1.7.RELEASE'
+//   compile 'org.hibernate:hibernate-core:4.3.6.Final'
    compile 'javax.servlet:javax.servlet-api:3.1.0'
    compile 'org.slf4j:slf4j-simple:1.7.7'
    compile 'org.javassist:javassist:3.15.0-GA'

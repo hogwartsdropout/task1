@@ -22,9 +22,9 @@ public class CustomerService {
         this.orderRepository = orderRepository;
     }
     public Customer getCustomerById(long id){
-        return customerRepository.findOne(id);
+        return customerRepository.findById(id).get();
     }
-    public Car getCarById(long id){return carRepository.findOne(id);}
+    public Car getCarById(long id){return carRepository.findById(id).get();}
     public void addCustomer(Customer customer){
         customerRepository.save(customer);
     }

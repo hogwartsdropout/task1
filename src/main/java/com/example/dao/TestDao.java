@@ -6,14 +6,14 @@ import com.example.entity.Car;
 import com.example.entity.Customer;
 import com.example.entity.Order;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate4.HibernateTemplate;
 
 import com.example.entity.Person;
+import org.springframework.orm.hibernate5.HibernateTemplate;
 
 @Transactional
 public class TestDao implements ITestDao {
 	@Autowired
-	private HibernateTemplate  hibernateTemplate;
+	private HibernateTemplate hibernateTemplate;
 
 	public void saveClient(){
 		Customer client = new Customer();

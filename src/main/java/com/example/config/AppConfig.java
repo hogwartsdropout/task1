@@ -7,14 +7,16 @@ import com.example.entity.Customer;
 import com.example.entity.Order;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
+
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.hibernate4.HibernateTemplate;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.example.dao.ITestDao;
 import com.example.dao.TestDao;
@@ -77,6 +79,7 @@ public class AppConfig {
         lcemfb.setDataSource(getDataSource());
         lcemfb.setPackagesToScan("com.example.entity");
         lcemfb.setPersistenceProviderClass(HibernatePersistenceProvider.class);
+        lcemfb.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         return lcemfb;
     }
 }
