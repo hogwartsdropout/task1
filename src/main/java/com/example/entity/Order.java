@@ -1,9 +1,19 @@
 package com.example.entity;
 
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import org.hibernate.HibernateException;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+
 import javax.persistence.*;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Types;
 
 @Entity
 @Table(name = "\"order\"")
+@TypeDef(name="pgsql_enum", typeClass = PostgreSQLEnumType.class)
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -18,7 +28,9 @@ public class Order {
     @Column(name="car_id", nullable = false)
     private Long car;
     private String color;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Type( type = "pgsql_enum" )
+    private Status status;
 
     public long getId() {
         return id;
@@ -52,15 +64,15 @@ public class Order {
         this.color = color;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public Order(long client, long car, String color, String status) {
+    public Order(long client, long car, String color, Status status) {
         this.client = client;
         this.car = car;
         this.color = color;
@@ -78,4 +90,8 @@ public class Order {
                 ", status='" + status + '\'' +
                 '}';
     }
+    public enum Status {
+        CREATED,PROGRESS,DONE
+    }
+
 }

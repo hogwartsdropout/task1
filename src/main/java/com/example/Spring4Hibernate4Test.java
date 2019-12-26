@@ -21,7 +21,7 @@ public class Spring4Hibernate4Test {
 	  ctx.refresh();
 	  ITestDao testDao = ctx.getBean(ITestDao.class);
 	  CustomerService customerService = ctx.getBean((CustomerService.class));
-	  testDao.saveOrder(new Order(40L,320L,"white","CREATED"));
+//	  testDao.saveOrder(new Order(40L,320L,"white","CREATED"));
 	  customerService.addCar(new Car("abc", "def"));
 	  customerService.addCustomer(new Customer("asdf","Qwer","Ty", null));
 	  System.out.println(customerService.getCustomerById(40L));

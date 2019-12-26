@@ -23,6 +23,28 @@ public class Customer {
     private String l_name;
     private String password;
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getF_name() {
+        return f_name;
+    }
+
+    public String getL_name() {
+        return l_name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+
+
     public void setUsername(String username) {
         this.username = username;
     }

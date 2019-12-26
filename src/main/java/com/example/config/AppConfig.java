@@ -1,5 +1,6 @@
 package com.example.config;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import com.example.entity.Car;
@@ -8,15 +9,11 @@ import com.example.entity.Order;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
 
-import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.hibernate.cfg.Configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.HibernateTemplate;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.example.dao.ITestDao;
 import com.example.dao.TestDao;
@@ -37,20 +34,13 @@ public class AppConfig {
         return new HibernateTemplate(sessionFactory());
     }
 
-    @Bean
+    @Bean(name = "entityManagerFactory")
     public SessionFactory sessionFactory() {
-        return new LocalSessionFactoryBuilder(getDataSource())
-                .addAnnotatedClasses(Person.class, Customer.class, Car.class, Order.class)
-                .buildSessionFactory();
-//		org.hibernate.cfg.Configuration cfg = new org.hibernate.cfg.Configuration()
-//				.addAnnotatedClass(com.concretepage.entity.Person.class)
-//				.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect")
-//				.setProperty("hibernate.connection.driver_class", "org.postgresql.Driver")
-//				.setProperty("hibernate.connection.url", "jdbc:postgresql://localhost/mydatabase")
-//				.setProperty("hibernate.connection.username", "postgres")
-//				.setProperty("hibernate.id.new_generator_mappings","false")
-//				.setProperty("hibernate.connection.password", "RAPtor1234");
-//		return cfg.buildSessionFactory();
+
+        Configuration cfg = new Configuration()
+                .addAnnotatedClass(Customer.class)
+                .addAnnotatedClass(Car.class).addAnnotatedClass(Order.class);
+        return cfg.buildSessionFactory();
 
     }
 
@@ -66,20 +56,4 @@ public class AppConfig {
         return dataSource;
     }
 
-    @Bean(name = "transactionManager")
-    public HibernateTransactionManager hibTransMan() {
-        HibernateTransactionManager htm = new HibernateTransactionManager(sessionFactory());
-        htm.setDataSource(getDataSource());
-        return htm;
-    }
-
-    @Bean(name = "entityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean getEntityManagerFactoryBean() {
-        LocalContainerEntityManagerFactoryBean lcemfb = new LocalContainerEntityManagerFactoryBean();
-        lcemfb.setDataSource(getDataSource());
-        lcemfb.setPackagesToScan("com.example.entity");
-        lcemfb.setPersistenceProviderClass(HibernatePersistenceProvider.class);
-        lcemfb.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        return lcemfb;
-    }
 }
