@@ -19,6 +19,11 @@ public class TestRestController {
         return customerService.getCarById(id);
     }
 
+    @GetMapping("/carp/{id}")
+    public Car getCarByIdInPath(@PathVariable(name = "id") Long id){
+        return customerService.getCarById(id);
+    }
+
     @GetMapping("/cars")
     public List<Car> listAllCars() {
         return customerService.getAllCars();
