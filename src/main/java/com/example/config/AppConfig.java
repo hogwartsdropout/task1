@@ -10,6 +10,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
 
 import org.hibernate.cfg.Configuration;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -55,5 +56,6 @@ public class AppConfig {
 
         return dataSource;
     }
+
 
 }
