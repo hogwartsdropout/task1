@@ -6,5 +6,5 @@
 out/*
 .gradle/*
 gradle/*
-build/*
+**/build/*
 out/*
