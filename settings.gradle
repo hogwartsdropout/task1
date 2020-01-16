@@ -1,3 +1,4 @@
 rootProject.name = 'springtask1'
 include 'restclient'
 include 'server'
+include 'soapclient'

@@ -20,9 +20,10 @@ import java.util.logging.Logger;
 public class Commands {
     @Autowired
     WebClient webClient;
+    Logger LOGGER = Logger.getLogger("RestClient");
     @ShellMethod("Add car")
     public String addCar(String vendor, String model){
-        Logger.getLogger("Client").log(Level.ALL,"adding a car: "+vendor+" "+model);
+        LOGGER.log(Level.ALL,"adding a car: "+vendor+" "+model);
         LinkedMultiValueMap<String,String> map = new LinkedMultiValueMap<>();
         map.add("vendor", vendor);
         map.add("model",model);

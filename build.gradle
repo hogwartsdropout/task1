@@ -1,5 +1,4 @@
 apply plugin: 'java'
-apply plugin: 'application'
 
 repositories {
     mavenCentral()
@@ -8,4 +7,5 @@ repositories {
 dependencies {
     compile project(":restclient")
     compile project(":server")
+    compile project(":soapclient")
 }

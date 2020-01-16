@@ -1,0 +1,107 @@
+import org.codehaus.groovy.runtime.GStringImpl
+
+buildscript {
+    ext {
+        xjcVersion= '3.0.5'
+        jaxbOutputDir = "$buildDir/generated/cxf" as GStringImpl
+        jaxb2BasicsVersion = '0.11.0'
+        cxfVersion = '3.3.1'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+
+    }
+}
+plugins {
+    id 'org.springframework.boot' version '2.2.2.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+archivesBaseName = 'TaskOneSOAPClient'
+
+
+
+repositories {
+    mavenCentral()
+}
+configurations {
+    cxf
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
+}
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    compile 'org.springframework.shell:spring-shell-starter:2.0.1.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-webflux:2.2.2.RELEASE'
+    compile 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    cxf "org.apache.cxf:cxf-tools-wsdlto-core:$cxfVersion"
+    cxf "org.apache.cxf:cxf-tools-wsdlto-frontend-jaxws:$cxfVersion"
+    cxf "org.apache.cxf:cxf-tools-wsdlto-databinding-jaxb:$cxfVersion"
+
+
+    cxf "org.jvnet.jaxb2_commons:jaxb2-fluent-api:3.0"
+    cxf "org.apache.cxf.xjcplugins:cxf-xjc-ts:$xjcVersion"
+
+    cxf "org.jvnet.jaxb2_commons:jaxb2-basics:$jaxb2BasicsVersion"
+
+    compile "org.apache.cxf.xjc-utils:cxf-xjc-runtime:$xjcVersion"
+    compile "org.jvnet.jaxb2_commons:jaxb2-basics-runtime:$jaxb2BasicsVersion"
+    compile 'commons-lang:commons-lang:2.6'
+}
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.example.soapclient.Main'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+test {
+    useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "$jaxbOutputDir"
+        }
+    }
+}
+
+task wsdl2java(type: JavaExec) {
+    ext {
+        outputDir = file("$buildDir/generated/cxf")
+        wsdllist = "src/main/resources/services.txt"
+    }
+    systemProperties  = ['javax.xml.accessExternalSchema': 'file' , 'file.encoding':'UTF8']
+    outputs.upToDateWhen { false }
+    outputs.dir outputDir
+    main = 'org.apache.cxf.tools.wsdlto.WSDLToJava'
+    classpath = project.configurations.cxf
+    args '-d', outputDir
+    args '-fe', 'jaxws21'
+    args '-client'
+    args '-verbose'
+    args '-validate'
+    args '-mark-generated'
+    args '-xjc-Xfluent-api'
+    args '-xjc-Xts'
+    args '-xjc-XhashCode'
+    args '-xjc-Xequals'
+    args '-wsdlList', wsdllist
+    doLast {
+        println "----- cxf jaxb2 files generated -----"
+    }
+}
+
+compileJava.dependsOn wsdl2java
