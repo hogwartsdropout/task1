@@ -104,4 +104,4 @@ task wsdl2java(type: JavaExec) {
     }
 }
 
-compileJava.dependsOn wsdl2java
+//compileJava.dependsOn wsdl2java

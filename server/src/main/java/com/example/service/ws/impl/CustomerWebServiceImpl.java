@@ -54,4 +54,29 @@ public class CustomerWebServiceImpl implements CustomerWebService {
     public Order changeOrder(Long id, Long client, Long car, String color, Order.Status status) {
         return service.changeOrder(id,client,car,color, status);
     }
+
+    @Override
+    public List<Order> getOrdersForUserWithStatus(Long customerId, Order.Status status) {
+        return service.getOrdersForUserWithStatus(customerId,status);
+    }
+
+    @Override
+    public void deleteOrder(Long id) {
+        service.deleteOrder(id);
+    }
+
+    @Override
+    public Car getCarById(Long id) {
+        return service.getCarById(id);
+    }
+
+    @Override
+    public Order createOrder(Long client, Long car, String color, Order.Status status) {
+        return service.addOrder(new Order(client,car,color,status));
+    }
+
+    @Override
+    public List<Order> getAllOrdersForCustomerById(Long customerId) {
+        return service.getOrdersByClient(customerId);
+    }
 }

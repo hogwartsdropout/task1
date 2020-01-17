@@ -63,4 +63,13 @@ public class CustomerService {
         return orderRepository.save(orderToChange);
 
     }
+    public void deleteOrder(Long id){
+        orderRepository.deleteById(id);
+    }
+    public List<Order> getOrdersForUserWithStatus(Long customerId, Order.Status status){
+        return orderRepository.getOrdersByClientAndStatus(customerId,status);
+    }
+    public List<Order> getOrdersByClient(Long id){
+        return orderRepository.getOrdersByClient(id);
+    }
 }

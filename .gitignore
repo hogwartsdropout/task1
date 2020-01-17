@@ -1,4 +1,4 @@
-
+*.log
 *.lnk
 *.iml
 **/.idea/*

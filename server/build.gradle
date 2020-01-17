@@ -82,6 +82,7 @@ dependencies {
     compile 'com.vladmihalcea:hibernate-types-52:2.8.0'
     compile 'org.apache.cxf:cxf-java2ws-plugin:3.3.4'
     implementation "org.apache.cxf:cxf-spring-boot-starter-jaxws:3.3.1"
+    implementation "io.springfox:springfox-swagger2:2.9.2"
 
 }
 

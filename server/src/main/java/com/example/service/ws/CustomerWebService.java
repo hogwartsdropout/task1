@@ -14,6 +14,10 @@ public interface CustomerWebService {
     List<Customer> getAllCustomers();
     List<Order> getAllOrders();
     Order changeOrder(Long id, Long client, Long car, String color, Order.Status status);
-
+    List<Order> getOrdersForUserWithStatus(Long customerId, Order.Status status);
+    void deleteOrder(Long id);
+    Car getCarById(Long id);
+    Order createOrder(Long client, Long car, String color, Order.Status status);
+    List<Order>getAllOrdersForCustomerById(Long customerId);
 
 }
