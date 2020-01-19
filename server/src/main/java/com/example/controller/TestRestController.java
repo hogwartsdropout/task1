@@ -20,7 +20,7 @@ public class TestRestController {
     }
 
     @GetMapping("/carp/{id}")
-    public Car getCarByIdInPath(@PathVariable(name = "id") Long id){
+    public Car getCarByIdInPath(@PathVariable(name = "id") Long id) {
         return customerService.getCarById(id);
     }
 
@@ -41,12 +41,12 @@ public class TestRestController {
 
     @PostMapping("/changeorder")
     public Order changeOrder(@RequestParam(name = "id", required = true) Long id,
-                              @RequestParam(name = "client", required = false) Long client,
-                              @RequestParam(name = "car", required = false) Long car,
-                              @RequestParam(name = "color", required = false) String color,
-                              @RequestParam(name = "status", required = false) Order.Status status) {
+                             @RequestParam(name = "client", required = false) Long client,
+                             @RequestParam(name = "car", required = false) Long car,
+                             @RequestParam(name = "color", required = false) String color,
+                             @RequestParam(name = "status", required = false) Order.Status status) {
         Order savedOrder = customerService.changeOrder(id, client, car, color, status);
-        if (savedOrder!=null) return savedOrder;
+        if (savedOrder != null) return savedOrder;
         return null;
     }
 
@@ -63,11 +63,25 @@ public class TestRestController {
                                 @RequestParam(name = "password") String password) {
         return customerService.addCustomer(new Customer(username, f_name, l_name, password));
     }
+
     @PostMapping("/addorder")
-public Order addOrder(@RequestParam(name = "client_id")Long clientId,
-                      @RequestParam(name = "car_id")Long carId,
-                      @RequestParam(name="color")String colorName,
-                      @RequestParam(name = "status", defaultValue = "CREATED") Order.Status status){
-        return customerService.addOrder(new Order(clientId,carId,colorName,status));
-}
+    public Order addOrder(@RequestParam(name = "client_id") Long clientId,
+                          @RequestParam(name = "car_id") Long carId,
+                          @RequestParam(name = "color") String colorName,
+                          @RequestParam(name = "status", defaultValue = "CREATED") Order.Status status) {
+        return customerService.addOrder(new Order(clientId, carId, colorName, status));
+    }
+    @PostMapping("/orderbyuserandstatus")
+    public List<Order> getOrdersForUserWithStatus(@RequestParam(name = "client_id") Long customerId,
+                                                  @RequestParam(name = "status") Order.Status status) {
+        return customerService.getOrdersForUserWithStatus(customerId, status);
+    }
+    @DeleteMapping("/deleteorder/{id}")
+    public void deleteOrder(@PathVariable(name = "id") Long id){
+        customerService.deleteOrder(id);
+    }
+    @GetMapping("/ordersbyclient/{id}")
+    public List<Order> getOrdersByClient(@PathVariable(name="id") Long id){
+        return customerService.getOrdersByClient(id);
+    }
 }
