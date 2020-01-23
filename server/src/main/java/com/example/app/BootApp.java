@@ -3,6 +3,7 @@ package com.example.app;
 
 import com.example.service.CustomerService;
 import com.example.service.ws.CustomerWebService;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
+import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
 
 
@@ -29,6 +31,7 @@ public class BootApp {
             System.out.println("Hey there");
         };
     }
+
     @Bean
     public SpringBus cxf(){return new SpringBus();}
 

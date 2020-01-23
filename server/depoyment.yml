@@ -1,0 +1,136 @@
+#app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autoshowroom
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autoshowroom
+  template:
+    metadata:
+      labels:
+        app: autoshowroom
+    spec:
+      containers:
+        - name: autoshowroom
+          image: cr.yandex/crp329gu3h4tnvmvff3b/autoshowroom:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: hibernate.connection.url
+              value: jdbc:postgresql://db-clusterip/restored
+            - name: hibernate.connection.url
+              value: jdbc:postgresql://db-clusterip/restored
+            - name: spring.datasource.username
+              value: postgres
+            - name: spring.datasource.password
+              value: RAPtor1234
+---
+# App load-balancer
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-lb
+  labels:
+    app: autoshowroom
+spec:
+  selector:
+    app: autoshowroom
+  ports:
+    - name: api
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+---
+# App clusterIP
+apiVersion: v1
+kind: Service
+metadata:
+  name: autoshowroom-clusterip
+  labels:
+    app: autoshowroom
+spec:
+  selector:
+    app: autoshowroom
+  ports:
+    - name: api
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: potgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: RAPtor1234
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-data
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: db-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-lb
+spec:
+  selector:
+    app: db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: LoadBalancer
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-clusterip
+  labels:
+    app: db
+spec:
+  selector:
+    app: db
+  ports:
+    - name: api
+      protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: ClusterIP
