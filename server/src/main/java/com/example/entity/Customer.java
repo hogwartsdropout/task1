@@ -63,7 +63,6 @@ public class Customer {
                 ", username='" + username + '\'' +
                 ", f_name='" + f_name + '\'' +
                 ", l_name='" + l_name + '\'' +
-                ", password='" + password + '\'' +
                 '}';
     }
 
