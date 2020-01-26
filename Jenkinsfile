@@ -1,8 +1,5 @@
 pipeline {
-  agent {
-    docker {
-      image 'openjdk:8-jre-slim'
-    }
+  agent any
 
   }
   stages {
