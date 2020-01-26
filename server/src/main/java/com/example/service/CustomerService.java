@@ -28,7 +28,7 @@ public class CustomerService {
     }
     public Car getCarById(long id){return carRepository.findById(id).get();}
     public Customer addCustomer(Customer customer){
-        return customerRepository.save(customer)
+        return customerRepository.save(customer);
     }
     public Car addCar(Car car){
        Car savedCar = (Car) carRepository.save(car);
