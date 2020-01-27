@@ -12,7 +12,7 @@ pipeline {
     steps{
         sh './gradlew :server:build'}
     }
-  }
+
   stage ('Gradle test'){
       steps{
           sh './gradlew :server:test'}
