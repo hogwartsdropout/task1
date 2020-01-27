@@ -23,7 +23,7 @@ pipeline {
         stage('Containerize') {
             steps {
                 script{
-                    image = docker.build("cr.yandex/crp329gu3h4tnvmvff3b/autoshowroom","./server/Dockerfile")
+                    image = docker.build("cr.yandex/crp329gu3h4tnvmvff3b/autoshowroom","./server/")
                     image.push()
                 }
             }
