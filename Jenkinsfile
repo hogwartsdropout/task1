@@ -1,21 +1,32 @@
 pipeline {
-  agent any
+    agent any
 
 
-  stages {
-    stage('Initialize') {
-      steps {
-        echo 'Hello'
-      }
-    }
-    stage ('Gradle build'){
-    steps{
-        sh './gradlew :server:build'}
-    }
+    stages {
+        stage('Initialize') {
+            steps {
+                echo 'Hello'
+            }
+        }
+        stage('Gradle build') {
+            steps {
+                sh './gradlew :server:build'
+            }
+        }
 
-  stage ('Gradle test'){
-      steps{
-          sh './gradlew :server:test'}
-      }
+        stage('Gradle test') {
+            steps {
+                sh './gradlew :server:test'
+            }
+        }
+
+        stage('Containerize') {
+            steps {
+                script{
+                    image = docker.build("cr.yandex/crp329gu3h4tnvmvff3b/autoshowroom","./server/Dockerfile")
+                    image.push()
+                }
+            }
+        }
     }
 }
