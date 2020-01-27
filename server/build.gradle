@@ -4,7 +4,6 @@ plugins {
     id 'org.springframework.boot' version '2.1.7.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
-    id "org.openapi.generator" version "4.2.2"
 }
 
 apply plugin: 'java'
@@ -47,30 +46,6 @@ task java2ws(type: JavaExec) {
 }
 
 
-openApiGenerate {
-    generatorName = "spring"
-    inputSpec = "$projectDir/src/main/resources/restapi.yaml".toString()
-    outputDir = "$projectDir".toString()
-    apiPackage = ("com.example.server.rs.api").toString()
-    skipOverwrite = true;
-    invokerPackage = ("com.example.server.rs").toString()
-    modelPackage = ("com.example.server.model").toString()
-    modelFilesConstrainedTo = [
-            "Error"
-    ]
-    configOptions = [
-            dateLibrary: "java8"
-    ]
-    systemProperties = [
-            apis           : "",
-            models         : "",
-            supportingFiles: ""
-    ]
-}
-
-openApiValidate {
-    inputSpec = "$projectDir/src/main/resources/restapi.yaml".toString()
-}
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.1.7.RELEASE'

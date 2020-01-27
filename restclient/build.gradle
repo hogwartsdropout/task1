@@ -12,7 +12,13 @@ archivesBaseName = 'TaskOneRestClient'
 repositories {
     mavenCentral()
 }
-
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.example.client.Main'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     compile 'org.springframework.shell:spring-shell-starter:2.0.1.RELEASE'
@@ -28,13 +34,7 @@ dependencies {
     compile 'io.gsonfire:gson-fire:1.8.0'
     compile 'org.threeten:threetenbp:1.3.5'
 }
-jar {
-    manifest {
-        attributes 'Main-Class': 'com.example.client.Main'
-    }
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
+
 }
 test {
     useJUnitPlatform()
