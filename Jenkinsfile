@@ -31,6 +31,8 @@ pipeline {
         stage("Deploy"){
             steps{
                 sh '$HOME/bin/kubectl apply -f ./server/deployment.yml'
+                //patch deployment to have current second in its annotation.
+                //this should help to restart autoshowroom pod with latest pulled image.
                 sh '$HOME/bin/kubectl patch deployment autoshowroom -p ' +
                         '"{\\"spec\\":{\\"template\\":{\\"metadata\\":{\\"annotations\\":{\\"date\\":\\"`date +\'%s\'`\\"}}}}}"'
             }
