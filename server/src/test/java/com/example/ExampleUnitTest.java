@@ -11,8 +11,8 @@ public class ExampleUnitTest {
         assertEquals(3, 1 + 2);
     }
 
-    @Test
-    public void orwellianTruth() {
-        assertEquals(5, 2 + 2);
-    }
+//    @Test
+//    public void orwellianTruth() {
+//        assertEquals(5, 2 + 2);
+//    }
 }
