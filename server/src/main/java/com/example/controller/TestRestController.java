@@ -55,7 +55,11 @@ public class TestRestController {
                              @RequestParam(name = "car", required = false) Long car,
                              @RequestParam(name = "color", required = false) String color,
                              @RequestParam(name = "status", required = false) Order.Status status) {
-        logger.log(Level.FINE,"Change order ");
+        logger.log(Level.FINE, "Change order " + id +
+                "\n\tclient: " + client +
+                "\n\tcar: " + car +
+                "\n\tcolor: " + color +
+                "\n\tstatus: " + status + "\n");
 
         Order savedOrder = customerService.changeOrder(id, client, car, color, status);
         if (savedOrder != null) return savedOrder;
@@ -65,7 +69,7 @@ public class TestRestController {
     @PostMapping("/addcar")
     public Car addCar(@RequestParam(name = "vendor") String vendor,
                       @RequestParam(name = "model") String model) {
-        logger.log(Level.FINE,"Add car. Vendor: "+vendor+"\nModel: "+model);
+        logger.log(Level.FINE, "Add car. Vendor: " + vendor + "\nModel: " + model);
 
         return customerService.addCar(new Car(vendor, model));
     }
@@ -76,7 +80,7 @@ public class TestRestController {
                                 @RequestParam(name = "l_name") String l_name,
                                 @RequestParam(name = "password") String password) {
         Customer customerToAdd = new Customer(username, f_name, l_name, password);
-        logger.log(Level.FINE, "Add customer: "+customerToAdd);
+        logger.log(Level.FINE, "Add customer: " + customerToAdd);
         return customerService.addCustomer(customerToAdd);
     }
 
@@ -86,26 +90,26 @@ public class TestRestController {
                           @RequestParam(name = "color") String colorName,
                           @RequestParam(name = "status", defaultValue = "CREATED") Order.Status status) {
         Order order = new Order(clientId, carId, colorName, status);
-        logger.log(Level.FINE, "Add order: "+order);
+        logger.log(Level.FINE, "Add order: " + order);
         return customerService.addOrder(order);
     }
 
     @PostMapping("/orderbyuserandstatus")
     public List<Order> getOrdersForUserWithStatus(@RequestParam(name = "client_id") Long customerId,
                                                   @RequestParam(name = "status") Order.Status status) {
-        logger.log(Level.FINE, "Get all orders in status "+status+"for customer "+customerId);
+        logger.log(Level.FINE, "Get all orders in status " + status + "for customer " + customerId);
         return customerService.getOrdersForUserWithStatus(customerId, status);
     }
 
     @DeleteMapping("/deleteorder/{id}")
     public void deleteOrder(@PathVariable(name = "id") Long id) {
-        logger.log(Level.FINE, "Delete order with id "+id);
+        logger.log(Level.FINE, "Delete order with id " + id);
         customerService.deleteOrder(id);
     }
 
     @GetMapping("/ordersbyclient/{id}")
     public List<Order> getOrdersByClient(@PathVariable(name = "id") Long id) {
-        logger.log(Level.FINE, "Delete order with id "+id);
+        logger.log(Level.FINE, "Delete order with id " + id);
         return customerService.getOrdersByClient(id);
     }
 }
