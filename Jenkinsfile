@@ -30,7 +30,7 @@ pipeline {
         }
         stage("Deploy"){
             steps{
-                sh '$HOME/bin/kubectl apply -f ./server/depoyment.yml'
+                sh '$HOME/bin/kubectl apply -f ./server/deployment.yml'
             }
         }
     }

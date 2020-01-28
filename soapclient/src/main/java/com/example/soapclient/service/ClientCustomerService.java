@@ -27,4 +27,5 @@ public interface ClientCustomerService {
     Order changeOrder(Long id, Long client, Long car,
                       String color,
                       Status status);
+    List<Order> getAllOrders();
 }

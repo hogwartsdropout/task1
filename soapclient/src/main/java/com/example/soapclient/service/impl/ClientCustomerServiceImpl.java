@@ -80,6 +80,11 @@ public ClientCustomerServiceImpl(){
                               Status status){
     return customerWebService.changeOrder(id, client, car, color, status);
     }
+    @Override
+    @ShellMethod("Get all orders")
+    public List<Order> getAllOrders(){
+    return customerWebService.getAllOrders();
+    }
 
 
 }
