@@ -16,6 +16,7 @@ spec:
       containers:
         - name: autoshowroom
           image: cr.yandex/crp329gu3h4tnvmvff3b/autoshowroom:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
