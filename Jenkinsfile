@@ -31,6 +31,8 @@ pipeline {
         stage("Deploy"){
             steps{
                 sh '$HOME/bin/kubectl apply -f ./server/deployment.yml'
+                sh '$HOME/bin/kubectl patch deployment autoshowroom -p ' +
+                        '"{\\"spec\\":{\\"template\\":{\\"metadata\\":{\\"annotations\\":{\\"date\\":\\"`date +\'%s\'`\\"}}}}}"'
             }
         }
     }
