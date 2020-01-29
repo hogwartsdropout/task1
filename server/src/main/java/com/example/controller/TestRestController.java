@@ -111,5 +111,6 @@ public class TestRestController {
     public List<Order> getOrdersByClient(@PathVariable(name = "id") Long id) {
         logger.log(Level.FINE, "Delete order with id " + id);
         return customerService.getOrdersByClient(id);
+        
     }
 }
