@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+option java_package = "com.example.grpc";
+
+message OrderSaveRequest {
+    uint64 client = 1;
+    uint64 car = 2;
+    string color = 3;
+    OrderStatus status = 4;
+    enum OrderStatus {
+        CREATED = 0;
+        PROGRESS = 1;
+        DONE = 2;
+    }
+}
+
+message OrderSaveResponse {
+    uint64 id = 1;
+    SaveStatus saveStatus = 2;
+    enum SaveStatus{
+        SUCCESS = 0;
+        FAIL = 1;
+    }
+}
+
+message OrderGetRequest {
+    uint64 id = 1;
+}
+
+message OrderGetResponse {
+    uint64 id = 1;
+    uint64 client =2;
+    uint64 car = 3;
+    string color = 4;
+    OrderStatus status = 5;
+    GetStatus getStatus = 6;
+    enum OrderStatus{
+        CREATED = 0;
+        PROGRESS = 1;
+        DONE = 2;
+    }
+    enum GetStatus{
+        SUCCESS = 0;
+        FAIL = 1;
+    }
+}
+
+service OrderService {
+    rpc save (OrderSaveRequest) returns (OrderSaveResponse);
+    rpc get (OrderGetRequest) returns (OrderGetResponse);
+}

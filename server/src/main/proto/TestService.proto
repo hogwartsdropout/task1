@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_package = "com.example.grpc";
+
+message TestRequest{
+    string name = 1;
+}
+
+message TestResponse{
+    string greeting = 1;
+}
+
+service TestService{
+    rpc send(TestRequest) returns (TestResponse);
+}
