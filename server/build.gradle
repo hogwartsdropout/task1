@@ -4,6 +4,7 @@ plugins {
     id 'org.springframework.boot' version '2.1.7.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
+    id 'com.google.protobuf' version '0.8.8'
 }
 
 apply plugin: 'java'
@@ -61,7 +62,42 @@ dependencies {
     compile 'org.apache.cxf:cxf-java2ws-plugin:3.3.4'
     implementation "org.apache.cxf:cxf-spring-boot-starter-jaxws:3.3.1"
     implementation "io.springfox:springfox-swagger2:2.9.2"
+    compile 'com.google.protobuf:protobuf-java:3.0.0'
+    compile 'io.grpc:grpc-stub:1.21.0'
+    compile 'io.grpc:grpc-protobuf:1.21.0'
+    implementation "io.github.lognet:grpc-spring-boot-starter:3.3.0"
     testCompile 'junit:junit:4.12'
 
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "$buildDir/generated/source/proto"
+        }
+    }
+}
+protobuf {
+    protoc {
+        // The artifact spec for the Protobuf Compiler
+        artifact = 'com.google.protobuf:protoc:3.0.0'
+    }
+    plugins {
+        // Optional: an artifact spec for a protoc plugin, with "grpc" as
+        // the identifier, which can be referred to in the "plugins"
+        // container of the "generateProtoTasks" closure.
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.21.0'
+        }
+    }
+    generateProtoTasks {
+        ofSourceSet('main')*.plugins {
+            // Apply the "grpc" plugin whose spec is defined above, without
+            // options.  Note the braces cannot be omitted, otherwise the
+            // plugin will not be added. This is because of the implicit way
+            // NamedDomainObjectContainer binds the methods.
+            grpc { }
+        }
+    }
 }
 

@@ -26,14 +26,22 @@ public class OrderGRpcService extends OrderServiceGrpc.OrderServiceImplBase {
         String color = request.getColor();
         Order.Status status = Order.Status.valueOf(request.getStatus().name());
         Order orderToSave = new Order(client,car,color,status);
-        Order savedOrder = customerService.addOrder(orderToSave);
-        OrderServiceOuterClass.OrderSaveResponse response =
-                OrderServiceOuterClass.OrderSaveResponse.newBuilder()
-                        .setId(savedOrder.getId())
-                        .setSaveStatus(OrderServiceOuterClass.OrderSaveResponse.SaveStatus.SUCCESS)
-                        .build();
-        responseObserver.onNext(response);
-        responseObserver.onCompleted();
-
+        try {
+            Order savedOrder = customerService.addOrder(orderToSave);
+            OrderServiceOuterClass.OrderSaveResponse response =
+                    OrderServiceOuterClass.OrderSaveResponse.newBuilder()
+                            .setId(savedOrder.getId())
+                            .setSaveStatus(OrderServiceOuterClass.OrderSaveResponse.SaveStatus.SUCCESS)
+                            .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }catch (Exception e) {
+            OrderServiceOuterClass.OrderSaveResponse response =
+                    OrderServiceOuterClass.OrderSaveResponse.newBuilder()
+                            .setSaveStatus(OrderServiceOuterClass.OrderSaveResponse.SaveStatus.FAIL)
+                            .build();
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+        }
     }
 }
