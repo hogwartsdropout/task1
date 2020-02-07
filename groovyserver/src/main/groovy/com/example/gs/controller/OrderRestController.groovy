@@ -5,7 +5,7 @@ import com.example.gs.model.Order
 import com.example.gs.model.Order.Status
 import com.example.gs.repo.OrderRepo
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.transaction.annotation.Transactional
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,7 +18,9 @@ class OrderRestController {
     @Autowired
     OrderRepo orderRepo
     @Autowired
-    OrderGrpcClient client
+    OrderGrpcClient grpcClient
+    @Autowired
+    KafkaTemplate<String,Order> kafkaTemplate
 
     @PostMapping('addorder')
     Order saveOrder(@RequestParam(name = "client_id") long client,
@@ -32,9 +34,14 @@ class OrderRestController {
         orderToSave.status=status
         return orderRepo.save(orderToSave)
     }
-    @PostMapping('/ao')
-    public Order test(@RequestBody Order order){
-        println client.save(order)
+    @PostMapping('/aogrpc')
+    public Order addOrderViaGRpc(@RequestBody Order order){
+        println grpcClient.save(order)
+        return orderRepo.save(order)
+    }
+    @PostMapping('/aokafka')
+    public Order addOrderViaKafka(@RequestBody Order order){
+        kafkaTemplate.send("orders",order)
         return orderRepo.save(order)
     }
 }

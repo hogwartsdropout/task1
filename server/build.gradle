@@ -66,6 +66,7 @@ dependencies {
     compile 'io.grpc:grpc-stub:1.21.0'
     compile 'io.grpc:grpc-protobuf:1.21.0'
     implementation "io.github.lognet:grpc-spring-boot-starter:3.3.0"
+    implementation 'org.springframework.kafka:spring-kafka:2.2.7.RELEASE'
     testCompile 'junit:junit:4.12'
 
 }

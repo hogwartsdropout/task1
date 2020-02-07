@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component
 class OrderGrpcClient {
     @Autowired
     OrderServiceGrpc.OrderServiceBlockingStub stub;
-
+    //Remote call to save an order to the database from java server.
+    //returns id of the record on success or zero otherwise.
     long save(Order order) {
         OrderServiceOuterClass.OrderSaveResponse response = stub
                 .save(OrderServiceOuterClass.OrderSaveRequest.newBuilder()
@@ -23,6 +24,6 @@ class OrderGrpcClient {
         println response.saveStatus //TODO: remove
         if (response.saveStatus == OrderServiceOuterClass.OrderSaveResponse.SaveStatus.SUCCESS) {
             return response.id
-        }else return 0L
+        } else return 0L
     }
 }

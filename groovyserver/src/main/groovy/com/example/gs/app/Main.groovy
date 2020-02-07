@@ -8,12 +8,14 @@ import com.example.gs.model.Order
 import com.example.gs.repo.OrderRepo
 import io.grpc.ManagedChannelBuilder
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.transaction.annotation.EnableTransactionManagement
 
 @SpringBootApplication
@@ -26,43 +28,39 @@ class Main {
     @Autowired
     OrderRepo orderRepo
 
+    @Value('${autoshowroom.host}')
+    String host
+    @Value('${autoshowroom.port}')
+    int port
+
     @Bean
     public CommandLineRunner demo() {
         return { args ->
             println "So groovy. Such gradle. Wow."
-            println testServiceBlockingStub().send(TestRequestOuterClass.TestRequest.newBuilder()
-                    .setName("Newbie")
-                    .build()).greeting
-//            OrderServiceOuterClass.OrderSaveResponse response = orderServiceBlockingStub()
-//                    .save(OrderServiceOuterClass.OrderSaveRequest.newBuilder()
-//                    .setClient(40L)
-//                    .setCar(320L)
-//                    .setColor("RED")
-//                    .setStatus(OrderServiceOuterClass.OrderSaveRequest.OrderStatus.CREATED)
-//                    .build())
-//            if(response.saveStatus == OrderServiceOuterClass.OrderSaveResponse.SaveStatus.SUCCESS){
-//                println "Successfully saved order with id "+response.id
-//            }
-            Order order = new Order()
-//            order.id = UUID.randomUUID()
-            order.client = 40
-            order.car = 320
-            order.color = "red"
-            order.status = Order.Status.CREATED
-            println orderRepo.save(order)
+            println "gRpc configured to "+host+":"+port
+//            println testServiceBlockingStub().send(TestRequestOuterClass.TestRequest.newBuilder()
+//                    .setName("Newbie")
+//                    .build()).greeting
+//            Order order = new Order()
+//            order.client = 40
+//            order.car = 320
+//            order.color = "red"
+//            order.status = Order.Status.CREATED
+//            println orderRepo.save(order)
+//            kafkaTemplate.send("orders",order)
 
         }
     }
 
-    @Bean
-    TestServiceGrpc.TestServiceBlockingStub testServiceBlockingStub() {
-        return TestServiceGrpc.newBlockingStub(ManagedChannelBuilder.forAddress("localhost", 6565)
-                .usePlaintext().build())
-    }
-
+//    @Bean
+//    TestServiceGrpc.TestServiceBlockingStub testServiceBlockingStub() {
+//        return TestServiceGrpc.newBlockingStub(ManagedChannelBuilder.forAddress("localhost", 6565)
+//                .usePlaintext().build())
+//    }
+//
     @Bean
     OrderServiceGrpc.OrderServiceBlockingStub orderServiceBlockingStub() {
-        return OrderServiceGrpc.newBlockingStub(ManagedChannelBuilder.forAddress("localhost", 6565)
+        return OrderServiceGrpc.newBlockingStub(ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext().build())
     }
 }

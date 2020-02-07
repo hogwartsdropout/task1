@@ -1,0 +1,131 @@
+#app
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: groovyserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: groovyserver
+  template:
+    metadata:
+      labels:
+        app: groovyserver
+    spec:
+      containers:
+        - name: groovyserver
+          image: cr.yandex/crp329gu3h4tnvmvff3b/groovyserver:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8090
+          env:
+            - name: spring.data.cassandra.contact-points
+              value: cassandra
+            - name: spring.data.cassandra.port
+              value: "9042"
+            - name: spring.data.cassandra.keyspace-name
+              value: autoshowroom
+            - name: spring.data.cassandra.username
+              value: cassandra
+            - name: spring.data.cassandra.password
+              value: cassandra
+            - name: kafka.bootstrapAddress
+              value: "notkafka:9092"
+            - name: autoshowroom.host
+              value: "grpc"
+            - name: autoshowroom.port
+              value: "6565"
+---
+# App load-balancer
+apiVersion: v1
+kind: Service
+metadata:
+  name: groovyserver-lb
+  labels:
+    app: groovyserver
+spec:
+  selector:
+    app: groovyserver
+  ports:
+    - name: api
+      protocol: TCP
+      port: 8090
+      targetPort: 8090
+  type: LoadBalancer
+---
+# App clusterIP
+apiVersion: v1
+kind: Service
+metadata:
+  name: groovyserver-clusterip
+  labels:
+    app: groovyserver
+spec:
+  selector:
+    app: groovyserver
+  ports:
+    - name: api
+      protocol: TCP
+      port: 8090
+      targetPort: 8090
+  type: ClusterIP
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cassandra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cassandra
+  template:
+    metadata:
+      labels:
+        app: cassandra
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: cassandra
+          image: cassandra:latest
+          ports:
+            - containerPort: 9042
+          env:
+            - name: JVM_OPTS
+              value: "-Xms1024M -Xmx1024M"
+          volumeMounts:
+            - name: cassandra-data
+              mountPath: /var/lib/cassandra
+      volumes:
+        - name: cassandra-data
+          persistentVolumeClaim:
+            claimName: cassandra-data
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: cassandra-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cassandra
+  labels:
+    app: cassandra
+spec:
+  selector:
+    app: cassandra
+  ports:
+    - name: api
+      protocol: TCP
+      port: 9042
+      targetPort: 9042
+  type: ClusterIP

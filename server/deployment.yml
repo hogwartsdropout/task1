@@ -19,6 +19,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
+            - containerPort: 6565
           env:
             - name: spring.datasource.url
               value: jdbc:postgresql://db-clusterip/restored
@@ -26,6 +27,10 @@ spec:
               value: postgres
             - name: spring.datasource.password
               value: RAPtor1234
+            - name: kafka.bootstrapAddress
+              value: "notkafka:9092"
+            - name: kafka.group
+              value: autoshowroom
 ---
 # App load-balancer
 apiVersion: v1
@@ -59,6 +64,23 @@ spec:
       protocol: TCP
       port: 8080
       targetPort: 8080
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc
+  labels:
+    app: autoshowroom
+spec:
+  selector:
+    app: autoshowroom
+  ports:
+    - name: grpc
+      protocol: TCP
+      port: 6565
+      targetPort: 6565
   type: ClusterIP
 
 ---
@@ -133,3 +155,88 @@ spec:
       port: 5432
       targetPort: 5432
   type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zookeeper
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+        - name: zookeeper
+          image: confluentinc/cp-zookeeper:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 2181
+          env:
+            - name: ZOOKEEPER_CLIENT_PORT
+              value: "2181"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notkafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notkafka
+  template:
+    metadata:
+      labels:
+        app: notkafka
+    spec:
+      containers:
+        - name: kafka
+          image: confluentinc/cp-kafka:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9092
+          env:
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value: "zookeeper:2181"
+            - name: KAFKA_ADVERTISED_LISTENERS
+              value: "PLAINTEXT://notkafka:9092"
+            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
+              value: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper
+  labels:
+    app: zookeeper
+spec:
+  selector:
+    app: zookeeper
+  ports:
+    - name: api
+      protocol: TCP
+      port: 2181
+      targetPort: 2181
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notkafka
+  labels:
+    app: notkafka
+spec:
+  selector:
+    app: notkafka
+  ports:
+    - name: api
+      protocol: TCP
+      port: 9092
+      targetPort: 9092
+  type: ClusterIP
+---
