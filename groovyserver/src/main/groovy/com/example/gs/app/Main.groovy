@@ -38,26 +38,12 @@ class Main {
         return { args ->
             println "So groovy. Such gradle. Wow."
             println "gRpc configured to "+host+":"+port
-//            println testServiceBlockingStub().send(TestRequestOuterClass.TestRequest.newBuilder()
-//                    .setName("Newbie")
-//                    .build()).greeting
-//            Order order = new Order()
-//            order.client = 40
-//            order.car = 320
-//            order.color = "red"
-//            order.status = Order.Status.CREATED
-//            println orderRepo.save(order)
-//            kafkaTemplate.send("orders",order)
+
 
         }
     }
 
-//    @Bean
-//    TestServiceGrpc.TestServiceBlockingStub testServiceBlockingStub() {
-//        return TestServiceGrpc.newBlockingStub(ManagedChannelBuilder.forAddress("localhost", 6565)
-//                .usePlaintext().build())
-//    }
-//
+
     @Bean
     OrderServiceGrpc.OrderServiceBlockingStub orderServiceBlockingStub() {
         return OrderServiceGrpc.newBlockingStub(ManagedChannelBuilder.forAddress(host, port)

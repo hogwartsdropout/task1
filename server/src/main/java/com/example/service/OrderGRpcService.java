@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.entity.Order;
 import com.example.grpc.OrderServiceGrpc;
 import com.example.grpc.OrderServiceOuterClass;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,7 @@ public class OrderGRpcService extends OrderServiceGrpc.OrderServiceImplBase {
                     OrderServiceOuterClass.OrderSaveResponse.newBuilder()
                             .setSaveStatus(OrderServiceOuterClass.OrderSaveResponse.SaveStatus.FAIL)
                             .build();
-            responseObserver.onNext(response);
-            responseObserver.onCompleted();
+            responseObserver.onError(e);
         }
     }
 }
